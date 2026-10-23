@@ -39,6 +39,17 @@ button:disabled{cursor:wait;opacity:.65}.error{color:#e8a2a2;font-size:14px;min-
 .briefing p{font-size:clamp(16px,1.7vw,19px);color:#d3e5d5;line-height:1.85}
 .briefing strong{color:#bdf6c7;font-weight:normal}
 .info b{color:#ceeeda;font-weight:normal}.info strong{color:#f1aeae;font-weight:normal}
+.final-lead{font-size:clamp(26px,3.8vw,43px);line-height:1.42;color:#e9f7eb;letter-spacing:-.02em;margin:22px 0 15px;text-shadow:0 0 20px #5cb97744}
+.final-story{font-size:17px;line-height:1.9;max-width:730px;margin-bottom:28px}
+.event-card{background:linear-gradient(135deg,#1a3020,#102018);border:1px solid #76a782;border-radius:9px;padding:clamp(24px,4vw,38px);margin:25px 0;box-shadow:0 0 35px #5da8731d}
+.event-kicker{display:inline-block;background:#a3e0ae;color:#102219;font-size:12px;font-weight:bold;padding:5px 11px;border-radius:3px;margin-bottom:17px}
+.event-card h3{color:#ebffef;font-size:clamp(27px,3.4vw,39px);line-height:1.35;font-weight:normal;margin:0 0 7px}
+.event-subtitle{font-size:17px;color:#cae7d1;margin:0 0 22px}
+.event-details{border-top:1px solid #4c7457;padding-top:17px;display:grid;grid-template-columns:1fr 1fr;gap:15px 27px}
+.event-detail small{display:block;color:#93ba9c;font-size:12px;margin-bottom:4px}
+.event-detail strong{font-weight:normal;color:#effbf1;font-size:17px;line-height:1.65}
+.event-perks{margin-top:23px;padding:16px 18px;background:#0d1c12;border-left:3px solid #8bd69a;color:#d4f0db;font-size:15px;line-height:1.85}
+.final-closer{text-align:center;font-size:clamp(18px,2.1vw,24px);color:#dbf5e1;margin:25px 0 8px}
 .logline{display:flex;justify-content:space-between;gap:12px;border-bottom:1px dotted #2e4a36;padding:10px 0;font-size:16px}
 .logline:last-child{border-bottom:0}.logline span:last-child{color:#b6d4ba}.logline.broken{color:#f0a0a0;background:#361c1b;animation:flicker .2s 4}
 .logline.broken span:last-child{color:#f0a0a0}.loader{width:100%;height:4px;background:#1c3021;margin:23px 0;overflow:hidden}.loader i{display:block;height:100%;background:#93dfa1;width:0;animation:load 1.6s forwards}
@@ -53,7 +64,7 @@ button:disabled{cursor:wait;opacity:.65}.error{color:#e8a2a2;font-size:14px;min-
 .stamp{color:#9e5e5b;text-align:right;font-size:14px;margin-top:19px}
 .footer{position:relative;z-index:1;color:#668771;font-size:11px;text-align:center;padding:0 20px 23px}
 [hidden]{display:none!important}
-@media(max-width:600px){body{padding:6px;place-items:stretch}.terminal{min-height:calc(100vh - 12px)}.bar{padding:12px 15px}.content{padding:29px 20px}.briefing{padding:18px 19px}.fields{grid-template-columns:1fr}.logline{font-size:14px}.paper td{padding:8px 6px}}
+@media(max-width:600px){body{padding:6px;place-items:stretch}.terminal{min-height:calc(100vh - 12px)}.bar{padding:12px 15px}.content{padding:29px 20px}.briefing{padding:18px 19px}.fields,.event-details{grid-template-columns:1fr}.logline{font-size:14px}.paper td{padding:8px 6px}}
 @media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
 </style>
 </head>
@@ -125,7 +136,7 @@ button:disabled{cursor:wait;opacity:.65}.error{color:#e8a2a2;font-size:14px;min-
       html('<p>일치하는 출입기록을 찾았습니다.</p><div class="info"><b>다산정보관 · 3층 일반자료실</b><br><span class="muted">조회일자: 2026. '+state.date.slice(0,2)+'. '+state.date.slice(2,4)+'. / 조회 기준시각: '+state.time.slice(0,2)+':'+state.time.slice(2,4)+'</span></div><div id="logs"><div class="logline"><span>18:00</span><span>시설점검 완료</span></div><div class="logline"><span>18:55</span><span>출입 확인</span></div><div class="logline"><span>19:00</span><span>마지막 열람 기록</span></div><div class="logline" id="missing"><span>20:30</span><span>출입 확인</span></div></div><div id="scan-box"><div class="loader"><i></i></div><p class="muted">원본 자료와 출입기록을 대조하는 중...</p></div><div id="anomaly" hidden><div class="alert"><b>비정상적인 출입기록이 감지되었습니다.</b><p>19:00~20:30 구간의 기록을 확인할 수 없습니다.</p><p>기록번호: '+CASE_ID+'</p></div><div class="actions"><button class="primary" id="inspect" type="button">이 기록을 확인해 볼래? →</button></div></div>');
       window.setTimeout(()=>{if(state.page!==2)return;const row=document.getElementById('missing');if(row){row.classList.add('broken');row.innerHTML='<span>19:00~20:30</span><span>▒▒ 기록 확인 불가 ▒▒</span>';}document.getElementById('scan-box').hidden=true;document.getElementById('anomaly').hidden=false;document.getElementById('logs').classList.add('glitch');btn('inspect',()=>setPage(3));},1750);
     }else{
-      html('<div class="eyebrow">접근 권한 확인</div><div class="alert"><b>원본 기록을 열 수 없습니다.</b><p>기록번호: '+CASE_ID+'</p><p>열람 시각: 19:00~20:30</p><p>원본 보관 위치: 다산정보관 내부</p></div><hr class="rule"><h2>사라진 90분의 진실을<br>확인하시겠습니까?</h2><p>삭제된 것으로 보이는 기록의 원본은 도서관 내부에서만 확인할 수 있습니다.</p><div class="info"><b>2026 심야 독서캠프</b><br><span class="muted">행사 날짜: 미확정 (11월 23일 또는 30일 예정)</span><br><span class="muted">장소: 다산정보관</span><br><span class="muted">사건번호: '+CASE_ID+'</span></div><p class="muted">※ 이 페이지는 체험형 미스터리 시연이며 실제 출입기록이 아닙니다.</p><div class="actions"><button class="primary" id="restart" type="button">처음부터 다시 조사하기 ↻</button></div>');
+      html(`<div class="eyebrow">접근 권한 확인</div><div class="alert"><b>원본 기록을 열 수 없습니다.</b><p>기록번호: ${CASE_ID}</p><p>열람 시각: 19:00~20:30</p><p>원본 보관 위치: 다산정보관 내부</p></div><hr class="rule"><h2 class="final-lead">사라진 90분의 진실을<br>확인하시겠습니까?</h2><p class="final-story">온라인 조사는 여기까지입니다.<br>사라진 기록의 마지막 단서는 <strong>다산정보관</strong>에 남아 있습니다.</p><section class="event-card" aria-label="심야 독서캠프 행사 안내"><span class="event-kicker">현장 조사 참여 안내</span><h3>2026 심야 독서캠프</h3><p class="event-subtitle">당신이 직접 사건의 마지막 기록을 확인할 차례입니다.</p><div class="event-details"><div class="event-detail"><small>일정</small><strong>2026. 11. 23.(월) 18:00~22:00 </strong></div><div class="event-detail"><small>장소</small><strong>다산정보관 3층·4층</strong></div><div class="event-detail"><small>참가 대상</small><strong>한국기술교육대학교 재학생</strong></div><div class="event-detail"><small>신청 기간</small><strong>11. 2.(월)~11. 15.(일) </strong></div><div class="event-detail"><small>신청 방법</small><strong>개별 참가 신청 폼 (별도 안내)</strong></div><div class="event-detail"></div></div><div class="event-perks">참여 학부생 H&amp;C 마일리지 4점 · 참가자 야식 및 다과 제공</div></section><p class="final-closer">미해결 사건의 다음 조사자를 기다립니다.</p><p class="muted" style="text-align:center">사건번호 ${CASE_ID}</p><p class="muted"></p><div class="actions"><button class="secondary" id="restart" type="button">처음부터 다시 조사하기 ↻</button></div>`);
       btn('restart',()=>{state.place='';state.date='';state.time='';setPage(0);});
     }
   }
